@@ -7,6 +7,12 @@
    animation-fill-mode: both;
  }
 
+/* SVG Loading */
+svg path,
+svg rect{
+  fill: black;
+}
+
  @keyframes fadeIn {
    from {
      opacity: 0;
