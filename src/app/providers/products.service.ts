@@ -16,13 +16,17 @@ export class ProductsService {
 
     this.loadingProducts = true;
 
-    if ( this.products.length === 0) {
+    const promise = new Promise (( resolve, reject ) =>  {
+
       this.http.get('https://urku-portfolio.firebaseio.com/products_idx.json')
         .subscribe( response => {
           this.products = response.json();
           this.loadingProducts = false;
+          resolve();
         });
-    }
+    });
+
+    return promise;
 
   }
 
@@ -35,13 +39,28 @@ export class ProductsService {
     console.log('Buscando producto');
     console.log(this.products.length);
 
-    if ( this.products.length === 0 ) {
-      this.loadProducts();
-    }
+    this.productsSearched = [];
 
-    this.products.forEach( products => {
-      console.log( products );
-    });
+    this.products.length === 0 ?
+      this.loadProducts().then( () => {
+        // the load finish
+        this.filterProducts( text );
+      })
+      :
+      this.filterProducts( text );
+
+
   }
 
+  private filterProducts ( text: string) {
+    this.products.forEach( products => {
+
+      text = text.toLowerCase();
+      if (products.categoria.indexOf( text ) >= 0 ||
+          products.titulo.toLowerCase().indexOf( text ) >= 0 ) {
+        console.log( products );
+        this.productsSearched.push( products );
+      }
+    });
+  }
 }

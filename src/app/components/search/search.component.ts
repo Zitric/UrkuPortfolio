@@ -12,7 +12,7 @@ export class SearchComponent  {
   text: string = undefined;
 
   constructor( private activatedRoute: ActivatedRoute,
-               private productsService: ProductsService) {
+               public productsService: ProductsService) {
 
     activatedRoute.params.subscribe( params => {
       this.text = params.text;
